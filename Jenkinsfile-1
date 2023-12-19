@@ -3,8 +3,13 @@ pipeline {
   stages {
     stage('Verify version') {
       steps {
-        sh 'docker run --rm flyway/flyway:10.3.0 version'
-      }
+       # sh 'docker run --rm flyway/flyway:10.3.0 version'
+     script {
+                    def containerId = sh(script: 'docker run -d flyway/flyway:10.3.0 version', returnStdout: true).trim()
+                    sh "docker wait $containerId"
+                    sh "docker rm $containerId"
+                }      
+}
     }
   }
 }
