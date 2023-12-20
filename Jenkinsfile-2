@@ -3,7 +3,6 @@ pipeline {
   environment {
     DB_URL=credentials('db-url')
     DB_USR=credentials('db-usr')
-    DB_PSW=credentials('db-psw')
   }
   stages {
     stage('Verify version') {
@@ -13,17 +12,17 @@ pipeline {
     }
     stage('migrate') {
       steps {
-        sh 'docker run --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.3.0 -url=$DB_URL -user=$DB_USR -password=$DB_PSW migrate'
+        sh 'docker run --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.3.0 -url=$DB_URL -user=$DB_USR -password=$DB_USR migrate'
       }
     }
     stage('validate') {
       steps {
-        sh 'docker run --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.3.0 -url=$DB_URL -user=$DB_USR -password=$DB_PSW validate'
+        sh 'docker run --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.3.0 -url=$DB_URL -user=$DB_USR -password=$DB_USR validate'
       }
     }
     stage('info') {
       steps {
-        sh 'docker run --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.3.0 -url=$DB_URL -user=$DB_USR -password=$DB_PSW info'
+        sh 'docker run --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.3.0 -url=$DB_URL -user=$DB_USR -password=$DB_USR info'
       }
     }
   }
