@@ -1,0 +1,30 @@
+pipeline {
+  agent any 
+  environment {
+    DB_URL=credentials('db-url')
+    DB_USR=credentials('db-usr')
+    DB_PSW=credentials('db-psw')
+  }
+  stages {
+    stage('Verify version') {
+      steps {
+        sh 'docker run --rm flyway/flyway:10.3.0 version'
+      }
+    }
+    stage('migrate') {
+      steps {
+        sh 'docker run --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.3.0 -url=$DB_URL -user=$DB_USR -password=$DB_PSW migrate'
+      }
+    }
+    stage('validate') {
+      steps {
+        sh 'docker run --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.3.0 -url=$DB_URL -user=$DB_USR -password=$DB_PSW validate'
+      }
+    }
+    stage('info') {
+      steps {
+        sh 'docker run --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.3.0 -url=$DB_URL -user=$DB_USR -password=$DB_PSW info'
+      }
+    }
+  }
+}
