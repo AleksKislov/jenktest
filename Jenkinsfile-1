@@ -1,7 +1,10 @@
 pipeline {
   agent {
-  docker { image 'flyway/flyway:10.3.0' args '-u root' } 
-} 
+          docker {
+            image 'flyway/flyway:10.3.0'
+            args '-u root'
+        }
+  } 
  
   stages {
     stage('Verify version') {
