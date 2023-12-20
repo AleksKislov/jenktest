@@ -1,14 +1,13 @@
 pipeline {
-  agent any 
+  agent {
+  docker { image 'flyway/flyway:10.3.0' args '-u root' } 
+} 
+ 
   stages {
     stage('Verify version') {
       steps {
-     script {
-                    def containerId = sh(script: 'docker run flyway/flyway:10.3.0 version', returnStdout: true).trim()
-                    sh "docker wait $containerId"
-                    sh "docker rm $containerId"
-                }      
-}
+	sh 'version'
+	}
     }
   }
 }
