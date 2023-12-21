@@ -7,17 +7,17 @@ pipeline {
   stages {
     stage('migrate') {
       steps {
-        sh 'docker run --user $(id -u):$(id -g) --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.4.0 -X -url=$DB_URL -defaultSchema=_flyway -schemas=_flyway -user=$DB_USR -password=$DB_USR migrate'
+        sh 'docker run -u 0 --privileged --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.4.0 -X -url=$DB_URL -defaultSchema=_flyway -schemas=_flyway -user=$DB_USR -password=$DB_USR migrate'
       }
     }
     stage('validate') {
       steps {
-        sh 'docker run --user $(id -u):$(id -g) --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.4.0 -url=$DB_URL -defaultSchema=_flyway -schemas=_flyway -user=$DB_USR -password=$DB_USR validate'
+        sh 'docker run -u 0 --privileged --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.4.0 -url=$DB_URL -defaultSchema=_flyway -schemas=_flyway -user=$DB_USR -password=$DB_USR validate'
       }
     }
     stage('info') {
       steps {
-        sh 'docker run --user $(id -u):$(id -g) --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.4.0 -url=$DB_URL -defaultSchema=_flyway -schemas=_flyway -user=$DB_USR -password=$DB_USR info'
+        sh 'docker run -u 0 --privileged --rm -v $WORKSPACE/sql:/flyway/sql flyway/flyway:10.4.0 -url=$DB_URL -defaultSchema=_flyway -schemas=_flyway -user=$DB_USR -password=$DB_USR info'
       }
     }
   }
