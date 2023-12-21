@@ -1,4 +1,4 @@
-create table tours.person (
+create table _flyway.person (
   id int not null,
   name varchar(100) not null
 );
